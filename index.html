@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title> JSTimer</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+    }
+    input[type="number"] {
+        width: 50px;
+        text-align: center;
+        margin: 0 5px;
+    }
+    button {
+        font-size: 1em;
+        padding: 10px 20px;
+        margin: 10px;
+        cursor: pointer;
+    }
+</style>
+</head>
+<body>
+<div>
+    <input type="number" id="hours" min="0" placeholder="00"> :
+    <input type="number" id="minutes" min="0" max="59" placeholder="00"> :
+    <input type="number" id="seconds" min="0" max="59" placeholder="00">
+</div>
+<div>
+    <button id="startButton">Start</button>
+    <button id="pauseButton">Pause</button>
+    <button id="resetButton">Reset</button>
+</div>
+
+<script>
+    let timer;
+    let hoursInput = document.getElementById('hours');
+    let minutesInput = document.getElementById('minutes');
+    let secondsInput = document.getElementById('seconds');
+    let hours, minutes, seconds;
+
+    function startTimer() {
+        hours = parseInt(hoursInput.value) || 0;
+        minutes = parseInt(minutesInput.value) || 0;
+        seconds = parseInt(secondsInput.value) || 0;
+
+        if (hours === 0 && minutes === 0 && seconds === 0) {
+            return;
+        }
+
+        timer = setInterval(updateTime, 1000);
+    }
+
+    function updateTime() {
+        if (hours === 0 && minutes === 0 && seconds === 0) {
+            clearInterval(timer);
+            return;
+        }
+
+        if (seconds === 0) {
+            if (minutes === 0) {
+                if (hours === 0) {
+                    clearInterval(timer);
+                    return;
+                }
+                hours--;
+                minutes = 59;
+            } else {
+                minutes--;
+            }
+            seconds = 59;
+        } else {
+            seconds--;
+        }
+
+        displayTime();
+    }
+
+    function displayTime() {
+        hoursInput.value = hours.toString().padStart(2, '0');
+        minutesInput.value = minutes.toString().padStart(2, '0');
+        secondsInput.value = seconds.toString().padStart(2, '0');
+    }
+
+    function pauseTimer() {
+        clearInterval(timer);
+    }
+
+    function resetTimer() {
+        clearInterval(timer);
+        hoursInput.value = '00';
+        minutesInput.value = '00';
+        secondsInput.value = '00';
+        hours = minutes = seconds = 0;
+    }
+
+    document.getElementById("startButton").addEventListener("click", startTimer);
+    document.getElementById("pauseButton").addEventListener("click", pauseTimer);
+    document.getElementById("resetButton").addEventListener("click", resetTimer);
+</script>
+</body>
+</html>
